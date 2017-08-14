@@ -1,0 +1,132 @@
+﻿#pragma kernel dtwCalc
+
+RWStructuredBuffer<float> globalCostMatrix; // matrix of total cost of path from motionQuery[0] to motionQuery[n]
+RWStructuredBuffer<float> costMatrix; // cost (costMatrixance) between a point in a queryTemplate and a point in a motionTemplate
+RWStructuredBuffer<float4> motionQuery; // input sequence
+RWStructuredBuffer<float4> motionTemplate; // motion template for comparison
+
+int tempLen;
+int queryLength;
+int numOfTemp;
+int numOfBodyParts;
+
+int globalMin;
+int globalMinIndex;
+
+
+RWStructuredBuffer<float2> shaderMin;
+RWStructuredBuffer<float> allMin;
+RWStructuredBuffer<float> testPath;
+RWStructuredBuffer<float> path;
+
+StructuredBuffer<int> dynamicTemplate;
+StructuredBuffer<int> sum;
+
+
+
+[numthreads(10, 1, 1)]
+
+//=============================================================================================================================================
+void dtwCalc(uint3 id : SV_DispatchThreadID)
+{
+	for (int k = 0; k < numOfBodyParts; k++)
+	{
+
+		for (int i = 0; i < dynamicTemplate[id.x*numOfBodyParts + k + 1]; i++)
+		{
+
+			for (int j = 0; j < queryLength; j++)
+			{
+				//calculate cost. passing each template to a core and compare the input with the templates
+				float x = (motionQuery[k*queryLength + j].x - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].x) * (motionQuery[k*queryLength + j].x - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].x);
+				float y = (motionQuery[k*queryLength + j].y - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].y) * (motionQuery[k*queryLength + j].y - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].y);
+				float z = (motionQuery[k*queryLength + j].z - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].z) * (motionQuery[k*queryLength + j].z - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].z);
+				float w = (motionQuery[k*queryLength + j].w - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].w) * (motionQuery[k*queryLength + j].w - motionTemplate[(sum[id.x*numOfBodyParts + k] + i)].w);
+				float totalCost = sqrt(x + y + z + w);
+				costMatrix[(sum[id.x*numOfBodyParts + k] + i) *queryLength + j] = totalCost;
+			}
+		}
+	}
+
+	//i is m, j is n
+	for (int k = 0; k < numOfBodyParts; k++)
+	{
+		//initialize the first index of the global cost matrix
+		globalCostMatrix[sum[id.x*numOfBodyParts + k] * queryLength] = costMatrix[((sum[id.x*numOfBodyParts + k + 1])) *queryLength];
+
+		for (int i = 0; i < dynamicTemplate[id.x*numOfBodyParts + k + 1]; i++)
+		{
+			//first column
+			globalCostMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength] = 0;
+
+			//second column
+			globalCostMatrix[(sum[id.x*numOfBodyParts + k] + i)* queryLength + 1] = costMatrix[(sum[id.x*numOfBodyParts + k] + i)* queryLength + 1];
+		}
+
+		for (int j = 1; j < queryLength; j++)
+		{
+			//first row
+			globalCostMatrix[(sum[id.x*numOfBodyParts + k]) * queryLength + j] = 100000;
+
+			//second row
+			globalCostMatrix[(sum[id.x*numOfBodyParts + k] + 1)* queryLength + j] = globalCostMatrix[(sum[id.x*numOfBodyParts + k] + 1) * queryLength + j - 1] + costMatrix[(sum[id.x*numOfBodyParts + k] + 1) * queryLength + j];
+		}
+
+		for (int j = 2; j < queryLength; j++)
+		{
+
+			for (int i = 2; i < dynamicTemplate[id.x*numOfBodyParts + k + 1]; i++)
+			{
+				float top = globalCostMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength + (j - 1)] +
+					costMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength + j];
+
+				float mid = globalCostMatrix[(sum[id.x*numOfBodyParts + k] + (i - 1))*queryLength + (j - 1)] +
+					costMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength + j];
+
+				float left = globalCostMatrix[(sum[id.x*numOfBodyParts + k] + (i - 1))*queryLength + j] +
+					costMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength + j];
+
+				float cheapest = 0;
+				if (i == queryLength - 1 && j == queryLength - 1)
+				{
+					cheapest = 0;
+				}
+				if ((top < mid) && (top < left))
+				{
+					cheapest = top;
+					testPath[(sum[id.x*numOfBodyParts + k] + i)*queryLength + j] = (sum[id.x*numOfBodyParts + k] + i - 1)*queryLength + (j - 2);
+				}
+				else if (mid < left)
+				{
+					cheapest = mid;
+					testPath[(sum[id.x*numOfBodyParts + k] + i)*queryLength + j] = (sum[id.x*numOfBodyParts + k] + i - 1)*queryLength + (j - 1);
+				}
+				else
+				{
+					cheapest = left;
+					testPath[(sum[id.x*numOfBodyParts + k] + i)*queryLength + j] = (sum[id.x*numOfBodyParts + k] + i - 2)*queryLength + (j - 1);
+				}
+
+				globalCostMatrix[(sum[id.x*numOfBodyParts + k] + i)* queryLength + j] = cheapest;
+
+			}
+		}
+
+		for (int k = 0; k < numOfBodyParts; k++)
+		{
+			float minValue = 10000000;
+			int minIndex = -1;
+
+			for (int i = queryLength - 1; i < dynamicTemplate[id.x*numOfBodyParts + k + 1]; i++)
+			{
+				if (globalCostMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength + queryLength - 1] <= minValue) {
+					minValue = globalCostMatrix[(sum[id.x*numOfBodyParts + k] + i)*queryLength + queryLength - 1];
+					minIndex = (sum[id.x*numOfBodyParts + k] + i)*queryLength + queryLength - 1;
+				}
+			}
+			shaderMin[id.x*numOfBodyParts + k].x = minIndex;
+			shaderMin[id.x*numOfBodyParts + k].y = minValue;
+		}
+	}
+
+}

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QDTWComputeShader (Working Version With Fixed Size Template and Input).Plugins", "QDTWComputeShader (Working Version With Fixed Size Template and Input).Plugins.csproj", "{6B3B6298-D9A7-EE57-9D2E-28A285BA90F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QDTWComputeShader (Working Version With Fixed Size Template and Input)", "QDTWComputeShader (Working Version With Fixed Size Template and Input).csproj", "{236DFFE0-B2FE-0057-2723-A03FB3DA46BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QDTWComputeShader (Working Version With Fixed Size Template and Input).Editor.Plugins", "QDTWComputeShader (Working Version With Fixed Size Template and Input).Editor.Plugins.csproj", "{663D1D83-0E8B-3629-AEAF-1A3385E89913}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B3B6298-D9A7-EE57-9D2E-28A285BA90F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B3B6298-D9A7-EE57-9D2E-28A285BA90F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B3B6298-D9A7-EE57-9D2E-28A285BA90F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B3B6298-D9A7-EE57-9D2E-28A285BA90F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{236DFFE0-B2FE-0057-2723-A03FB3DA46BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{236DFFE0-B2FE-0057-2723-A03FB3DA46BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{236DFFE0-B2FE-0057-2723-A03FB3DA46BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{236DFFE0-B2FE-0057-2723-A03FB3DA46BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663D1D83-0E8B-3629-AEAF-1A3385E89913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663D1D83-0E8B-3629-AEAF-1A3385E89913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663D1D83-0E8B-3629-AEAF-1A3385E89913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663D1D83-0E8B-3629-AEAF-1A3385E89913}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
