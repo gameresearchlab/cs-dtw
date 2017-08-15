@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTWComputeShader.Plugins", "DTWComputeShader.Plugins.csproj", "{BA7F5BBC-FCCD-D61A-F0BE-5079A4DD4611}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTWComputeShader", "DTWComputeShader.csproj", "{56318042-CAEE-3445-D876-6794BA221F77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTWComputeShader.Editor.Plugins", "DTWComputeShader.Editor.Plugins.csproj", "{E08DFFA2-D7E1-C0EB-2BC4-034853033E93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA7F5BBC-FCCD-D61A-F0BE-5079A4DD4611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA7F5BBC-FCCD-D61A-F0BE-5079A4DD4611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA7F5BBC-FCCD-D61A-F0BE-5079A4DD4611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA7F5BBC-FCCD-D61A-F0BE-5079A4DD4611}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56318042-CAEE-3445-D876-6794BA221F77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56318042-CAEE-3445-D876-6794BA221F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56318042-CAEE-3445-D876-6794BA221F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56318042-CAEE-3445-D876-6794BA221F77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E08DFFA2-D7E1-C0EB-2BC4-034853033E93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E08DFFA2-D7E1-C0EB-2BC4-034853033E93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E08DFFA2-D7E1-C0EB-2BC4-034853033E93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E08DFFA2-D7E1-C0EB-2BC4-034853033E93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
